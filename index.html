@@ -1,15 +1,87 @@
 <!DOCTYPE html>
 
 <html>
-  <title>Not my first vue app</title>
-  <script src="https://unpkg.com/vue"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+  <head>
+        <title>Not my first vue app</title>
+        <script src="https://unpkg.com/vue"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+ 
+        <style>
+            .tab-button {
+                padding: 6px 10px;
+                border-top-left-radius: 3px;
+                border-top-right-radius: 3px;
+                border: 1px solid #ccc;
+                cursor: pointer;
+                background: #f0f0f0;
+                margin-bottom: -1px;
+                margin-right: -1px;
+            }
+        
+            .tab-button:hover {
+                background: #e0e0e0;
+            }
+        
+            .tab-button.active {
+                background: #e0e0e0;
+            }
+        
+            .tab {
+                border: 1px solid #ccc;
+                padding: 10px;
+            }
+        </style>
+  </head>
 
   <body>
     <div id="app">
+        <div>
+            <button
+            v-for="tab in tabs"
+            :key="tab"
+            :class="['tab-button', { active: currentTab === tab }]"
+            @click="currentTab = tab">
+            {{ tab }}
+            </button>
+
+            <component :is="currentTabComponent" class="tab"></component>
+        </div>
+
+        <div>
+           <alert-box>take care!</alert-box>
+        </div>
+
+        <div>
+            <custom-input v-model="searchText"></custom-input>
+            <!-- <custom-input v-bind:value="searchText" v-on:input="searchText = $event"></custom-input> -->
+        </div>
+
+        <div :style="{ fontSize: postFontSize + 'em' }">
+            <blog-post-3
+            v-for="post in posts_3" 
+            :key="post.id" 
+            :post="post"
+            @enlarge-text="onEnlargeText"
+            ></blog-post-3>
+        </div>
+            <!-- @enlarge-text="postFontSize += $event" -->
+
+
+        <div>
+            <blog-post-2 
+            v-for="post in posts_2" 
+            :key="post.id" 
+            :post="post">
+        </blog-post-2>
+
+
+        </div>
       <div>
-        <blog-post v-for="post in posts" :key="post.id" :title="post.title">
+        <blog-post 
+        v-for="post in posts" 
+        :key="post.id" 
+        :title="post.title">
         </blog-post>
       </div>
 
@@ -137,9 +209,32 @@
     </div>
 
     <script>
+
+        Vue.component('blog-post-3', {
+                props: ['post'],
+                template: `
+                <div class="blog-pos-3t">
+                <h2>{{ post.title }}</h2>
+                <button v-on:click="$emit('enlarge-text', 0.1)">
+                    Enlarge text
+                </button>
+                <div v-html="post.content"></div>
+                </div>
+            `
+            })
+
+        Vue.component('blog-post-2', {
+                props: ['post'],
+                template: `
+        <div class="blog-post-2">
+        <h6>{{ post.title }}</h6>
+        <div v-html="post.content"></div>
+        </div>
+    `
+            })
       Vue.component("blog-post", {
         props: ["title"],
-        template: "<h3>{{ title }}</h3>",
+        template: "<h6>{{ title }}</h6>",
       });
 
       // Define a new component called button-counter
@@ -168,10 +263,56 @@
         props: ["todo"], // "prop"，类似于一个自定义 attribute。
       });
 
+      Vue.component('custom-input', {
+            props: ['value'],
+            template: `
+            <input
+            :value="value"
+            @input="$emit('input', $event.target.value)"
+            >
+        `
+        })
+
+        Vue.component('alert-box', {
+                template: `
+                        <div class="demo-alert-box">
+                        <strong>Error!</strong>
+                        <slot></slot>
+                        </div>
+                    `
+            })
+
+        Vue.component("tab-home", {
+            template: "<div>Home component</div>"
+        });
+        Vue.component("tab-posts", {
+            template: "<div>Posts component</div>"
+        });
+        Vue.component("tab-archive", {
+            template: "<div>Archive component</div>"
+        });
+
+
+
       // vm as ViewModel
       var vm = new Vue({
         el: "#app",
         data: {
+            currentTab: "Home",
+            tabs: ["Home", "Posts", "Archive"],
+            searchText: '',
+            postFontSize: 1,
+            posts_3: [
+                {id: 1, title: "My journey with Vue", content: '1a'},
+                {id: 2, title: "Blogging with Vue", content: '2a'},
+                {id: 3, title: "Why Vue is so fun", content: '3a'},
+            ],
+
+          posts_2: [
+                {id: 1, title: "My journey with Vue", content:'1a'},
+                {id: 2, title: "Blogging with Vue", content: '2a'},
+                {id: 3, title: "Why Vue is so fun", content: '3a'},
+            ],
           posts: [
             { id: 1, title: "My journey with Vue" },
             { id: 2, title: "Blogging with Vue" },
@@ -249,6 +390,11 @@
           },
         },
         methods: {
+
+          onEnlargeText: function (enlargeAmount) {
+                this.postFontSize += enlargeAmount
+          },
+
           addNewTodo: function () {
             this.todos_2.push({
               id: this.nextTodoId++,
@@ -283,24 +429,31 @@
         },
 
         computed: {
-          evenNumbers: function () {
-            return this.numbers.filter(function (number) {
-              return number % 2 === 0;
-            });
-          },
 
-          classObject: function () {
-            return {
-              active: this.isActive_2 && !this.error_2,
-              "text-danger": this.error_2 && this.error.type === "fatal",
-            };
-          },
+            currentTabComponent: function () {
+                return "tab-" + this.currentTab.toLowerCase();
+            },
 
-          // a computed getter
-          reversedMessage: function () {
-            // `this` points to the vm instance
-            return this.msg22.split("").reverse().join("");
-          },
+            evenNumbers: function () {
+                return this.numbers.filter(function (number) {
+                return number % 2 === 0;
+                });
+            },
+
+            classObject: function () {
+                return {
+                active: this.isActive_2 && !this.error_2,
+                "text-danger": this.error_2 && this.error.type === "fatal",
+                };
+            },
+
+            // a computed getter
+            reversedMessage: function () {
+                // `this` points to the vm instance
+                return this.msg22.split("").reverse().join("");
+            },
+
+            
         },
       });
     </script>
