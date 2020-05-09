@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html>
+  <title>Not my first vue app</title>
+  <script src="https://unpkg.com/vue"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+
+  <body>
+    <div id="app">
+      <div>
+        <blog-post v-for="post in posts" :key="post.id" :title="post.title">
+        </blog-post>
+      </div>
+
+      <div id="components-demo">
+        <button-counter></button-counter>
+        <button-counter></button-counter>
+        <button-counter></button-counter>
+      </div>
+
+      <div>
+        <input type="checkbox" id="checkbox" v-model="checked" />
+        <label for="checkbox">{{ checked }}</label>
+      </div>
+
+      <div>
+        <input v-model="message" placeholder="edit me" />
+        <p>Message is: {{ message }}</p>
+      </div>
+
+      <div>
+        <form @submit.prevent="addNewTodo">
+          <label for="new-todo">Add a todo</label>
+          <input
+            v-model="newTodoText"
+            id="new-todo"
+            placeholder="E.g. Feed the cat"
+          />
+          <button>Add</button>
+        </form>
+        <ul>
+          <li
+            is="todo-item2"
+            v-for="(todo, index) in todos_2"
+            :key="todo.id"
+            :title="todo.title"
+            @remove="todos_2.splice(index, 1)"
+          ></li>
+        </ul>
+      </div>
+
+      <div>
+        <span v-for="n in 10">{{ n }} </span>
+      </div>
+
+      <div>
+        <ul v-for="set in sets">
+          <li v-for="n in odd(set)">{{ n }}</li>
+        </ul>
+      </div>
+
+      <div>
+        <li v-for="n in evenNumbers">{{ n }}</li>
+      </div>
+
+      <div>
+        <template v-if="toogle_multi_piece">
+          <h1>Title</h1>
+          <p>Paragraph 1</p>
+          <p>Paragraph 2</p>
+        </template>
+
+        <template v-if="Math.random() > 0.5">
+          <h1>Math.random() > 0.5</h1>
+          <p>add one more line</p>
+        </template>
+        <template v-else>
+          <h1>Math.random() <= 0.5</h1>
+          <p>add one more line</p>
+        </template>
+      </div>
+
+      <div
+        class="static"
+        :class="{ active: isActive, 'text-danger': hasError }"
+      >
+        APPLE
+      </div>
+
+      <div :class="classObject"></div>
+
+      <p>
+        Ask a yes/no question:
+        <input v-model="question" />
+      </p>
+      <p>{{ answer }}</p>
+
+      <p :title="msg11">
+        daynamic title?
+      </p>
+
+      <span :title="message">
+        {{ msg2 }} {{ number + 42}} {{ ok ? 'YES' : 'NO' }} {{ reversedMessage
+        }}
+        <!-- {{ msg22.split('').reverse().join('') }} -->
+        <!-- <button @click="reverseMessage">Reverse Message</button> -->
+      </span>
+
+      <p v-if="seen" v-for="(todo, index) in todos">
+        {{ msg2 }} - {{ index }} -{{ todo.text }}
+      </p>
+
+      <p v-for="(value, name, index) in object_run">
+        {{ index }}.{{ name }}: {{ value }}
+      </p>
+
+      <p v-if="seen" v-for="todo in todos">
+        {{ todo.text }}
+      </p>
+
+      <p v-for="i in fruits">
+        {{ i }}
+      </p>
+
+      <p>
+        {{ msg3 }}
+        <input v-model="msg3" />
+      </p>
+
+      <todo-item
+        v-for="(item, index) in groceryList"
+        :todo="item"
+        :index="index"
+        :key="item.id"
+      ></todo-item>
+    </div>
+
+    <script>
+      Vue.component("blog-post", {
+        props: ["title"],
+        template: "<h3>{{ title }}</h3>",
+      });
+
+      // Define a new component called button-counter
+      Vue.component("button-counter", {
+        data: function () {
+          return {
+            count: 0,
+          };
+        },
+        template:
+          '<button v-on:click="count++">You clicked me {{ count }} times.</button>',
+      });
+
+      Vue.component("todo-item2", {
+        template:
+          "\<li>\
+                            {{ title }}\
+                            <button @click=\"$emit('remove')\">Remove</button>\
+                            </li>\
+                        ",
+        props: ["title"],
+      });
+
+      Vue.component("todo-item", {
+        template: "<li> {{ todo.text }} </li>",
+        props: ["todo"], // "prop"，类似于一个自定义 attribute。
+      });
+
+      // vm as ViewModel
+      var vm = new Vue({
+        el: "#app",
+        data: {
+          posts: [
+            { id: 1, title: "My journey with Vue" },
+            { id: 2, title: "Blogging with Vue" },
+            { id: 3, title: "Why Vue is so fun" },
+          ],
+          checked: true,
+          newTodoText: "",
+          todos_2: [
+            {
+              id: 1,
+              title: "Do the dishes",
+            },
+            {
+              id: 2,
+              title: "Take out the trash",
+            },
+          ],
+          nextTodoId: 3,
+          sets: [
+            [1, 2, 3, 4, 5],
+            [6, 7, 8, 9, 10],
+          ],
+          numbers: [1, 2, 3, 4, 5],
+          object_run: {
+            title: "How to do lists in Vue",
+            author: "Jane Doe",
+            publishedAt: "2016-04-10",
+          },
+          toogle_multi_piece: false,
+          isActive_2: true,
+          error_2: null,
+          isActive: true,
+          hasError: false,
+          question: "",
+          answer: "I cannot give you an answer until you ask a question!",
+          msg11: "msg11 show up",
+          msg22: "apple",
+          ok: false,
+          number: 0,
+          msg3: "apple",
+          message: "title pop up",
+          msg2: "banana",
+          seen: true,
+          todos: [
+            { text: "Javascript" },
+            { text: "Python" },
+            { text: "Mysql" },
+            { text: "Angular" },
+          ],
+          // curd op, like, app4.todos.push({ text: '新项目' })
+          fruits: ["apple", "banana"],
+          groceryList: [
+            { id: 0, text: "蔬菜" },
+            { id: 1, text: "奶酪" },
+            { id: 2, text: "随便其它什么人吃的东西" },
+          ],
+        },
+        created: function () {
+          // _.debounce is a function provided by lodash to limit how
+          // often a particularly expensive operation can be run.
+          // In this case, we want to limit how often we access
+          // yesno.wtf/api, waiting until the user has completely
+          // finished typing before making the ajax request. To learn
+          // more about the _.debounce function (and its cousin
+          // _.throttle), visit: https://lodash.com/docs#debounce
+          this.debouncedGetAnswer = _.debounce(this.getAnswer, 500);
+        },
+        watch: {
+          // whenever question changes, this function will run
+          question: function (newQuestion, oldQuestion) {
+            this.answer = "Waiting for you to stop typing...";
+
+            // 500 ms interval for each operation
+            this.debouncedGetAnswer();
+          },
+        },
+        methods: {
+          addNewTodo: function () {
+            this.todos_2.push({
+              id: this.nextTodoId++,
+              title: this.newTodoText,
+            });
+            this.newTodoText = "";
+          },
+
+          odd: function (numbers) {
+            return numbers.filter(function (number) {
+              return number % 2 !== 0;
+            });
+          },
+          getAnswer: function () {
+            if (this.question.indexOf("?") === -1) {
+              this.answer = "Questions usually contain a question mark. ;-)";
+              return;
+            }
+
+            this.answer = "Thinking...";
+
+            var vm = this;
+            axios
+              .get("https://yesno.wtf/api")
+              .then(function (response) {
+                vm.answer = _.capitalize(response.data.answer);
+              })
+              .catch(function (error) {
+                vm.answer = "Error! Could not reach the API. " + error;
+              });
+          },
+        },
+
+        computed: {
+          evenNumbers: function () {
+            return this.numbers.filter(function (number) {
+              return number % 2 === 0;
+            });
+          },
+
+          classObject: function () {
+            return {
+              active: this.isActive_2 && !this.error_2,
+              "text-danger": this.error_2 && this.error.type === "fatal",
+            };
+          },
+
+          // a computed getter
+          reversedMessage: function () {
+            // `this` points to the vm instance
+            return this.msg22.split("").reverse().join("");
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
