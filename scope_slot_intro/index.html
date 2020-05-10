@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Not my first vue app</title>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            <h3>test</h3>
+        </div>
+        <div>
+            <!--1.  https://vuejs.org/v2/guide/components-slots.html -->
+
+            <!-- <current-user>
+                <template v-slot:default="slotProps">
+                    {{ slotProps.user.firstName }}
+                </template>
+            </current-user> -->
+
+
+            <!--2.  Abbreviated Syntax for Lone Default Slots -->
+
+            <!-- <current-user>
+                <template v-slot="slotProps">
+                    {{ slotProps.user.firstName }}
+                </template>
+            </current-user> -->
+
+
+
+            <!--3.  Destructuring Slot Props -->
+            <!-- <current-user v-slot="{ user }">
+                {{ user.firstName }}
+            </current-user> -->
+
+
+            <!-- 4. use desturing, u can even renaming -->
+            <!-- <current-user v-slot="{ user: person }">
+                {{ person.firstName }}
+            </current-user> -->
+
+
+            <!-- not working.. -->
+            <!-- 5. You can even define fallbacks, to be used in case a slot prop is undefined -->
+            <!-- <current-user v-slot="{ user = { firstName: 'Guest' } }">
+                {{ user.firstName }}
+            </current-user> -->
+
+        </div>
+    </div>
+
+
+    <script>
+
+        Vue.component('current-user', {
+                template: `
+                          <span>
+                            <slot :user="user">
+                                <p> {{ user.lastName }}</p>
+                            </slot>
+                            </span>
+                        `,
+                
+                // when put data in sub component and not is .vue, and other case,
+                // like this case, data need to retrun by func for avoid name conflicting
+                 data: () => ({
+                        user: {
+                         firstName: 'pin wei',
+                         lastName: 'hu',
+                     }
+                    }),
+            
+        })
+
+        // vm as ViewModel
+        var vm = new Vue({
+            el: "#app",
+          
+            data: {
+              
+            },
+
+        });
+    </script>
+</body>
+
+</html>

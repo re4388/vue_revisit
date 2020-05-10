@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Not my first vue app</title>
+    <script src="https://unpkg.com/vue"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            <h3>alive</h3>
+        </div>
+        
+        <div>
+            <!--1.  https://vuejs.org/v2/guide/components-slots.html -->
+            <todo-list :todos="todos">
+                <template v-slot:todo="{todo}">
+                    <span v-if="todo.isComplete">✓</span>
+                    {{todo.text}}
+                </template>
+            </todo-list>
+
+
+
+        </div>
+    </div>
+
+
+    <script>
+
+        Vue.component('todo-list', {
+                template: `
+                        <ul>
+                            <li
+                            v-for="todo in filteredTodos"
+                            :key="todo.id"
+                            >
+                            <slot
+                            name="todo"
+                            :todo="todo"
+                            >
+                            {{ todo.text }}
+                            </slot>
+                            </li>
+                        </ul>
+                        `,
+                
+                // when put data in sub component and not is .vue, and other case,
+                // like this case, data need to retrun by func for avoid name conflicting
+                 data: () => ({
+                        filteredTodos: [
+                         {id: 0, text: "Javascript", isComplete: true},
+                         {id: 1, text: "Python", isComplete: false},
+                         {id: 2, text: "Mysql", isComplete: false},
+                         {id: 3, text: "Angular", isComplete: true},
+                        ]
+                    }),
+            
+        })
+
+        // vm as ViewModel
+        var vm = new Vue({
+            el: "#app",
+        });
+    </script>
+</body>
+
+</html>

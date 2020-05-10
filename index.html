@@ -36,6 +36,54 @@
 
   <body>
     <div id="app">
+        <!-- <div>
+            <todo-list :todos="filteredTodos">
+                <template v-slot:todo="{ todo }">
+                    <span v-if="todo.isComplet">✓</span>
+                    {{ todo.text }}
+                </template>
+            </todo-list>
+        </div> -->
+
+
+        <!-- not working, don't know why
+        <div>
+            <current-user #default="{ user }">
+                    {{ user.firstName }}
+            </current-user>
+        </div>
+     -->
+
+        <div>
+            <navigation-link url="/profile">
+                Your Profile
+                {{ posts_3[0].title }}
+                {{user.firstName}}
+            </navigation-link>
+        </div>
+        
+        <div>
+            <blog-post :title="posts_3[0].title"></blog-post>
+        </div>
+
+        <div>
+            <blog-post :title="42"></blog-post>
+        </div>
+        <div>
+            <button
+            v-for="tab in tabs2"
+            :key="tab.name"
+            :class="['tab-button', { active: currentTab2.name === tab.name }]"
+            @click="currentTab2 = tab">
+            {{ tab.name }}
+            </button>
+            
+            <component :is="currentTab2.component" class="tab"></component>
+        </div>
+
+
+        <br>
+        <br>
         <div>
             <button
             v-for="tab in tabs"
@@ -210,6 +258,43 @@
 
     <script>
 
+        //  Vue.component('todo-list', {
+        //         template: `
+        //                    <ul>
+        //                     <li
+        //                         v-for="todo in filteredTodos"
+        //                         v-bind:key="todo.id"
+        //                     >
+
+        //                         <slot name="todo" v-bind:todo="todo">
+        //                         {{ todo.text }}
+        //                         </slot>
+        //                     </li>
+        //                     </ul>
+        //                 `
+        //     })
+
+         Vue.component('current-user', {
+                template: `
+                            <span>
+                             <slot v-bind:user="user">
+                                {{ user.lastName }}
+                            </slot>
+                            </span>
+                        `
+            })
+
+
+        Vue.component('navigation-link', {
+                template: `
+                            <a
+                    :href="url"
+                    >
+                    <slot>Fallback Content</slot>
+                    </a>
+                        `
+            })
+
         Vue.component('blog-post-3', {
                 props: ['post'],
                 template: `
@@ -292,12 +377,41 @@
             template: "<div>Archive component</div>"
         });
 
+        const tabs_2 = [
+            {
+                name: "Home2",
+                component: {
+                    template: "<div>Home component2</div>"
+                }
+            },
+            {
+                name: "Posts2",
+                component: {
+                    template: "<div>Posts component2</div>"
+                }
+            },
+            {
+                name: "Archive2",
+                component: {
+                    template: "<div>Archive component2</div>"
+                }
+            }
+        ];
+
 
 
       // vm as ViewModel
       var vm = new Vue({
         el: "#app",
         data: {
+            user:{
+                firstName:'aa',
+                lastName:'bb',
+            },
+            likes:0,
+            tabs2: tabs_2,
+            currentTab2: tabs_2[0],
+
             currentTab: "Home",
             tabs: ["Home", "Posts", "Archive"],
             searchText: '',
@@ -356,11 +470,17 @@
           message: "title pop up",
           msg2: "banana",
           seen: true,
+        //   filteredTodos: [
+        //         {id: 0, text: "蔬菜", isComplete: true},
+        //         {id: 1, text: "奶酪", isComplete: false},
+        //         {id: 2, text: "随便其它什么人吃的东西", isComplete: true},
+        //     ],
+
           todos: [
-            { text: "Javascript" },
-            { text: "Python" },
-            { text: "Mysql" },
-            { text: "Angular" },
+            { id: 0, text: "Javascript", isComplete:true },
+            { id: 1, text: "Python" , isComplete: false},
+            { id: 2, text: "Mysql", isComplete: false },
+            { id: 3, text: "Angular", isComplete: true },
           ],
           // curd op, like, app4.todos.push({ text: '新项目' })
           fruits: ["apple", "banana"],
@@ -370,6 +490,12 @@
             { id: 2, text: "随便其它什么人吃的东西" },
           ],
         },
+        // Component Local Registration
+        // up top, u may have "import ComponentA from './ComponentA'"
+        // components: {
+        //       'component-a': ComponentA,
+        //   },
+
         created: function () {
           // _.debounce is a function provided by lodash to limit how
           // often a particularly expensive operation can be run.
@@ -453,7 +579,7 @@
                 return this.msg22.split("").reverse().join("");
             },
 
-            
+
         },
       });
     </script>
