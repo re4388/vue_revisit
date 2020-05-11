@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Not my first vue app</title>
+    <script src="https://unpkg.com/vue"></script>
+    
+</head>
+<!-- https://vuejs.org/v2/guide/render-function.html -->
+<body>
+    <div id="app">
+        <!-- <h1>
+            <a name="hello-world" href="#hello-world">
+                Hello world!
+            </a>
+        </h1> -->
+
+        <anchored-heading :level="3">Hello world!</anchored-heading>
+    </div>
+
+    <script type="text/x-template" id="anchored-heading-template">
+      <h1 v-if="level === 1">
+        <slot></slot>
+      </h1>
+      <h2 v-else-if="level === 2">
+        <slot></slot>
+      </h2>
+      <h3 v-else-if="level === 3">
+        <slot></slot>
+      </h3>
+      <h4 v-else-if="level === 4">
+        <slot></slot>
+      </h4>
+      <h5 v-else-if="level === 5">
+        <slot></slot>
+      </h5>
+      <h6 v-else-if="level === 6">
+        <slot></slot>
+      </h6>
+    </script>
+
+    <script>
+        Vue.component('anchored-heading', {
+                template: '#anchored-heading-template',
+                props: {
+                    level: {
+                        type: Number,
+                        required: true
+                    }
+                }
+            })
+        var vm = new Vue({
+            el: "#app",
+            data: {
+            },
+            methods: {
+               
+            }
+        });
+    </script>
+</body>
+
+</html>

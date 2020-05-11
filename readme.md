@@ -13,4 +13,11 @@
 
 ### note
 1. see .vue scoped slot example here -> https://codesandbox.io/s/scoped-slots-flmex?file=/src/App.vue:89-185
-2. 
+
+
+
+
+
+### resource
+1. https://github.com/vuejs/awesome-vue#components--libraries
+2. https://vuejs.org/v2/api/#Instance-Properties

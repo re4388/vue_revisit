@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Not my first vue app</title>
+    <script src="https://unpkg.com/vue"></script>
+    
+</head>
+<!-- https://vuejs.org/v2/guide/render-function.html -->
+<body>
+    <div id="app">
+        <!-- <h1>
+            <a name="hello-world" href="#hello-world">
+                Hello world!
+            </a>
+        </h1> -->
+
+        <anchored-heading :level="1">Hello world!</anchored-heading>
+    </div>
+
+
+    <script>
+        Vue.component('anchored-heading', {
+            render: function (createElement) {
+              return createElement(
+                'h' + this.level,   // tag name
+                this.$slots.default // array of children
+              )
+            },
+            props: {
+              level: {
+                type: Number,
+                required: true
+              }
+            }
+          })
+        var vm = new Vue({
+            el: "#app",
+            data: {
+            },
+            methods: {
+               
+            }
+        });
+    </script>
+</body>
+
+</html>

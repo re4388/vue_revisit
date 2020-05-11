@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Not my first vue app</title>
+    <script src="https://unpkg.com/vue"></script>
+
+    <!-- https://vuejs.org/v2/guide/custom-directive.html-->
+
+</head>
+
+<body>
+    <div id="app">
+        <h3>Scroll down inside this section ↓</h3>
+        <!-- <p v-pin="200">I am pinned onto the page at 200px to the left.</p> -->
+        <p v-pin:[direction]="200">I am pinned onto the page at 200px to the left.</p>
+
+        <!-- use Object Literals -->
+        <div v-demo="{ color: 'white', text: 'hello!' }"></div>
+       
+    </div>
+
+
+    <script>
+        // 
+        // Vue.directive('pin', {
+        //         bind: function (el, binding, vnode) {
+        //             el.style.position = 'fixed'
+        //             el.style.top = binding.value + 'px'
+        //         }
+        //     })
+
+        // Dynamic Directive Arguments
+        Vue.directive('pin', {
+                bind: function (el, binding, vnode) {
+                    el.style.position = 'fixed'
+                    var s = (binding.arg == 'left' ? 'left' : 'top')
+                    el.style[s] = binding.value + 'px'
+                }
+            })
+
+        // Function Shorthand -> not working 
+        Vue.directive('color', function (el, binding) {
+                el.style.backgroundColor = binding.value
+            })
+
+        Vue.directive('demo', function (el, binding) {
+                console.log(binding.value.color) // => "white"
+                console.log(binding.value.text)  // => "hello!"
+            })
+
+       
+
+        var vm = new Vue({
+            el: "#app",
+            data: function () {
+                return {
+                    direction: 'left'
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
