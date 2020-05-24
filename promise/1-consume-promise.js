@@ -12,4 +12,4 @@ promise
   .then((todo) => console.log("good", todo.title))
   .catch((err) => console.error("sad", err));
 
-console.log("🥪 Synchronous");
+console.log(" this is Synchronous code ");

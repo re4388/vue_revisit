@@ -1,33 +1,34 @@
-const tick = Date.now();
-const log = (v) => console.log(`${v} \n run time: ${Date.now() - tick}ms`);
+// const tick = Date.now();
+// const log = (v) => console.log(`${v} \n run time: ${Date.now() - tick}ms`);
 
-const getFruit = async (name) => {
-  const fruits = {
-    pineapple: "🍍",
-    peach: "🍑",
-    strawberry: "🍓",
-  };
+// const getFruit = async (name) => {
+//   const fruits = {
+//     pineapple: "🍍",
+//     peach: "🍑",
+//     strawberry: "🍓",
+//   };
 
-  return fruits[name];
-};
+//   return fruits[name];
+// };
 
-const fruits = ["peach", "pineapple", "strawberry"];
 
-const fruitLoop = async () => {
-  for (const f of fruits) {
-    const emoji = await getFruit(f);
-    log(emoji);
-  }
-};
+
+// const fruits = ["peach", "pineapple", "strawberry"];
+// const fruitLoop = async () => {
+//   for (const f of fruits) {
+//     const emoji = await getFruit(f);
+//     log(emoji);
+//   }
+// };
 
 // fruitLoop().then()
 
-const fruitInspection = async () => {
-  if ((await getFruit("peach")) === "🍑") {
-    console.log("looks peachy!");
-  }
-};
 
+// const fruitInspection = async () => {
+//   if ((await getFruit("peach")) === "🍑") {
+//     console.log("looks peachy!");
+//   }
+// };
 
 // fruitInspection().then();
 
@@ -41,4 +42,4 @@ const getTodo = async () => {
   console.log(title, userId, body);
 };
 
-// getTodo().then();
+getTodo().then();

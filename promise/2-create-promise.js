@@ -2,7 +2,7 @@ const tick = Date.now();
 const log = (v) => console.log(`${v} \n run time: ${Date.now() - tick}ms`);
 
 const codeBlocker = () => {
-  // Blocking
+// Blocking
 
 //   let i = 0;
 //   while(i < 1000000000) { i++;}
